@@ -1,0 +1,47 @@
+function travelTime(input) {
+    let destinations = {};
+
+    for (let line of input) {
+        let [country, city, costs] = line.split(" > ");
+        costs = +costs;
+        city = city.charAt(0).toUpperCase() + city.slice(1);
+
+        if (destinations.hasOwnProperty(country) === false) {
+            destinations[country] = {};
+        }
+        if (destinations[country].hasOwnProperty(city) === false) {
+            destinations[country][city] = costs;
+        }
+        if (costs < destinations[country][city]) {
+            destinations[country][city] = costs;
+        }
+    }
+
+    let sortedContries = Object.keys(destinations).sort((a, b) => {
+        return a.localeCompare(b);
+    });
+
+    for (let country of sortedContries) {
+        let result = "";
+        result += country + " -> " ;
+
+        let sortedTowns = Object.keys(destinations[country]).sort((t1, t2) => {
+            return destinations[country][t1] - destinations[country][t2]
+        });
+
+        for (const town of sortedTowns) {
+            result += town + " -> ";
+            result += destinations[country][town] + " ";
+        }
+
+        console.log(result)
+    }
+}
+
+travelTime([
+    "Bulgaria > Sofia > 500",
+    "Bulgaria > Sopot > 800",
+    "France > Paris > 2000",
+    "Albania > Tirana > 1000",
+    "Bulgaria > Sofia > 200"
+]);
